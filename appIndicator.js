@@ -33,6 +33,10 @@ var IconCache = Extension.imports.iconCache;
 const Util = Extension.imports.util;
 const Interfaces = Extension.imports.interfaces;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+
 const SNICategory = {
     APPLICATION: 'ApplicationStatus',
     COMMUNICATIONS: 'Communications',
@@ -580,17 +584,14 @@ class AppIndicators_IconActor extends Shell.Stack {
 
     _setOpacity(icon) {
 
-        let opacityValue = 220 // 0 - 255 from: settings.get_int('icon-opacity');
+        let settings = Convenience.getSettings();
+        let opacityValue = settings.get_int('icon-opacity');
 
         if (arguments.length == 1) {
-            // icon.opacityEnterId = icon.get_parent().connect('enter-event', function(actor, event) { icon.opacity = 255; });
-            // icon.opacityLeaveId = icon.get_parent().connect('leave-event', function(actor, event) { icon.opacity = opacityValue; });
             icon.opacity = opacityValue;
         } else {
             for (let i = 0; i < icons.length; i++) {
                 let icon = icons[i];
-                // icon.opacityEnterId = icon.get_parent().connect('enter-event', function(actor, event) { icon.opacity = 255; });
-                // icon.opacityLeaveId = icon.get_parent().connect('leave-event', function(actor, event) { icon.opacity = opacityValue; });
                 icon.opacity = opacityValue;
             }
         }
@@ -598,7 +599,8 @@ class AppIndicators_IconActor extends Shell.Stack {
 
     _setSaturation(icon) {
 
-        let desaturationValue = 1.0 // 0.0 - 1.0 from: settings.get_double('icon-saturation');
+        let settings = Convenience.getSettings();
+        let desaturationValue = settings.get_double('icon-saturation');
 
         if (arguments.length == 1) {
             let sat_effect = new Clutter.DesaturateEffect({factor : desaturationValue});
@@ -618,8 +620,9 @@ class AppIndicators_IconActor extends Shell.Stack {
 
     _setBrightnessContrast(icon) {
 
-        let brightnessValue = 0.0 // -1.0 - 1.0 from: settings.get_double('icon-brightness');
-        let contrastValue = -0.1 // -1.0 - 1.0 from: settings.get_double('icon-contrast');
+        let settings = Convenience.getSettings();
+        let brightnessValue = settings.get_double('icon-brightness');
+        let contrastValue = settings.get_double('icon-contrast');
 
         if (arguments.length == 1) {
             let bright_effect = new Clutter.BrightnessContrastEffect({});

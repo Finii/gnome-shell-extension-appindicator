@@ -21,9 +21,14 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension()
 const StatusNotifierWatcher = Extension.imports.statusNotifierWatcher
 const Util = Extension.imports.util
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+
 let statusNotifierWatcher = null;
 let isEnabled = false;
 let watchDog = null;
+let settings = null;
 
 function init() {
     watchDog = new NameWatchdog();
@@ -39,6 +44,8 @@ function init() {
         Util.Logger.debug("Reload detected, destroying old watchdog")
         watchDog.destroy();
     }
+
+    Convenience.initTranslations();
 }
 
 //FIXME: when entering/leaving the lock screen, the extension might be enabled/disabled rapidly.
@@ -54,6 +61,17 @@ function maybe_enable_after_name_available() {
 function enable() {
     isEnabled = true;
     maybe_enable_after_name_available();
+
+    settings = Convenience.getSettings();
+//    settings.connect('changed::icon-opacity', Lang.bind(this, setOpacity));
+//    settings.connect('changed::icon-saturation', Lang.bind(this, setSaturation));
+//    settings.connect('changed::icon-brightness', Lang.bind(this, setBrightnessContrast));
+//    settings.connect('changed::icon-contrast', Lang.bind(this, setBrightnessContrast));
+//    settings.connect('changed::icon-size', Lang.bind(this, setSize));
+//    settings.connect('changed::icon-spacing', Lang.bind(this, setSpacing));
+//    settings.connect('changed::tray-pos', Lang.bind(this, placeTray));
+//    settings.connect('changed::tray-order', Lang.bind(this, placeTray));
+
 }
 
 function disable() {
